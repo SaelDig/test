@@ -172,7 +172,7 @@ async function searchIssues(query) {
       }
     }
 
-    const response = await jiraRequest('/rest/api/3/search', {
+    const response = await jiraRequest('/rest/api/3/search/jql', {
       method: 'POST',
       body: JSON.stringify({
         jql,

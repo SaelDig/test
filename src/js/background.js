@@ -77,7 +77,7 @@ async function searchJiraIssues(query, settings) {
       }
     }
 
-    const response = await fetch(`https://${settings.jiraDomain}/rest/api/3/search`, {
+    const response = await fetch(`https://${settings.jiraDomain}/rest/api/3/search/jql`, {
       method: 'POST',
       headers: {
         'Authorization': 'Basic ' + btoa(`${settings.jiraEmail}:${settings.jiraToken}`),
