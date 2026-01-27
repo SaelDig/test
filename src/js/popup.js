@@ -5,6 +5,7 @@ let settings = null;
 let selectedIssue = null;
 let searchTimeout = null;
 let recentLogs = [];
+let myIssues = [];
 
 // DOM Elements
 const elements = {};
@@ -42,6 +43,8 @@ function cacheElements() {
   elements.recentLogsList = document.getElementById('recent-logs-list');
   elements.refreshLogs = document.getElementById('refresh-logs');
   elements.quickTimeBtns = document.querySelectorAll('.quick-time-btn');
+  elements.myIssuesList = document.getElementById('my-issues-list');
+  elements.refreshMyIssues = document.getElementById('refresh-my-issues');
 }
 
 async function loadSettings() {
@@ -59,6 +62,9 @@ async function loadSettings() {
       showNotConfigured();
     } else {
       showMainContent();
+
+      // Load assigned issues
+      loadMyIssues();
 
       // Load last issue if enabled
       if (settings.rememberLastIssue) {
@@ -116,6 +122,9 @@ function setupEventListeners() {
 
   // Refresh logs
   elements.refreshLogs.addEventListener('click', loadRecentLogs);
+
+  // Refresh my issues
+  elements.refreshMyIssues.addEventListener('click', loadMyIssues);
 
   // Close search results when clicking outside
   document.addEventListener('click', (e) => {
@@ -216,6 +225,88 @@ function displaySearchResults(issues) {
   });
 
   elements.searchResults.classList.remove('hidden');
+}
+
+// My Assigned Issues
+async function loadMyIssues() {
+  try {
+    // Show loading state
+    elements.myIssuesList.innerHTML = `
+      <div class="my-issues-loading">
+        <div class="spinner small"></div>
+        <span>Chargement...</span>
+      </div>
+    `;
+
+    // Query for issues assigned to current user, not done, ordered by updated date
+    const jql = 'assignee = currentUser() AND statusCategory != Done ORDER BY updated DESC';
+
+    const response = await jiraRequest('/rest/api/3/search/jql', {
+      method: 'POST',
+      body: JSON.stringify({
+        jql,
+        maxResults: 10,
+        fields: ['summary', 'issuetype', 'status', 'project']
+      })
+    });
+
+    if (response.issues && response.issues.length > 0) {
+      myIssues = response.issues;
+      displayMyIssues();
+    } else {
+      myIssues = [];
+      elements.myIssuesList.innerHTML = '<div class="my-issues-empty">Aucune issue assignée</div>';
+    }
+  } catch (error) {
+    console.error('Error loading my issues:', error);
+    elements.myIssuesList.innerHTML = '<div class="my-issues-empty">Erreur de chargement</div>';
+  }
+}
+
+function displayMyIssues() {
+  if (myIssues.length === 0) {
+    elements.myIssuesList.innerHTML = '<div class="my-issues-empty">Aucune issue assignée</div>';
+    return;
+  }
+
+  elements.myIssuesList.innerHTML = myIssues.map(issue => {
+    const statusClass = getStatusClass(issue.fields.status?.statusCategory?.key);
+    return `
+      <div class="my-issue-item" data-key="${issue.key}" data-summary="${escapeHtml(issue.fields.summary)}" data-id="${issue.id}">
+        <span class="issue-key">${issue.key}</span>
+        <div class="issue-info">
+          <span class="issue-summary">${escapeHtml(issue.fields.summary)}</span>
+          <span class="issue-meta">${issue.fields.issuetype?.name || ''} • ${issue.fields.project?.name || ''}</span>
+        </div>
+        <span class="issue-status ${statusClass}">${issue.fields.status?.name || ''}</span>
+      </div>
+    `;
+  }).join('');
+
+  // Add click handlers
+  elements.myIssuesList.querySelectorAll('.my-issue-item').forEach(item => {
+    item.addEventListener('click', () => {
+      selectIssue({
+        key: item.dataset.key,
+        summary: item.dataset.summary,
+        id: item.dataset.id
+      });
+    });
+  });
+}
+
+function getStatusClass(categoryKey) {
+  switch (categoryKey) {
+    case 'new':
+      return 'status-todo';
+    case 'indeterminate':
+      return 'status-in-progress';
+    case 'done':
+      return 'status-done';
+    default:
+      // Check if blocked or similar
+      return 'status-in-progress';
+  }
 }
 
 function selectIssue(issue) {
