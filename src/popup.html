@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JIRA Time Logger</title>
+  <link rel="stylesheet" href="css/popup.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <h1>⏱️ Time Logger</h1>
+      <button id="settings-btn" class="btn-icon" title="Paramètres">⚙️</button>
+    </header>
+
+    <!-- Not Configured State -->
+    <div id="not-configured" class="state-container hidden">
+      <div class="empty-state">
+        <span class="empty-icon">🔧</span>
+        <p>Configuration requise</p>
+        <button id="open-settings" class="btn btn-primary">Configurer JIRA</button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+      <!-- Issue Search -->
+      <section class="section">
+        <label for="issue-search" class="label">Issue JIRA</label>
+        <div class="search-container">
+          <input
+            type="text"
+            id="issue-search"
+            class="input"
+            placeholder="Rechercher par clé (ex: PROJ-123) ou texte..."
+            autocomplete="off"
+          >
+          <div id="search-spinner" class="spinner hidden"></div>
+        </div>
+        <div id="search-results" class="search-results hidden"></div>
+
+        <!-- Selected Issue Display -->
+        <div id="selected-issue" class="selected-issue hidden">
+          <div class="issue-badge">
+            <span id="selected-issue-key" class="issue-key"></span>
+            <button id="clear-issue" class="btn-clear" title="Changer d'issue">✕</button>
+          </div>
+          <span id="selected-issue-summary" class="issue-summary"></span>
+        </div>
+      </section>
+
+      <!-- Time Input -->
+      <section class="section">
+        <label class="label">Temps passé</label>
+        <div class="time-inputs">
+          <div class="time-group">
+            <input type="number" id="time-hours" class="input time-input" min="0" max="99" value="0">
+            <span class="time-label">heures</span>
+          </div>
+          <div class="time-group">
+            <input type="number" id="time-minutes" class="input time-input" min="0" max="59" value="0" step="5">
+            <span class="time-label">minutes</span>
+          </div>
+        </div>
+        <div class="quick-times">
+          <button type="button" class="quick-time-btn" data-time="15m">15m</button>
+          <button type="button" class="quick-time-btn" data-time="30m">30m</button>
+          <button type="button" class="quick-time-btn" data-time="1h">1h</button>
+          <button type="button" class="quick-time-btn" data-time="2h">2h</button>
+          <button type="button" class="quick-time-btn" data-time="4h">4h</button>
+          <button type="button" class="quick-time-btn" data-time="8h">8h</button>
+        </div>
+      </section>
+
+      <!-- Date Selection -->
+      <section class="section">
+        <label for="work-date" class="label">Date</label>
+        <input type="date" id="work-date" class="input">
+      </section>
+
+      <!-- Comment -->
+      <section class="section">
+        <label for="work-comment" class="label">Commentaire (optionnel)</label>
+        <textarea
+          id="work-comment"
+          class="input textarea"
+          rows="2"
+          placeholder="Description du travail effectué..."
+        ></textarea>
+      </section>
+
+      <!-- Submit Button -->
+      <button id="submit-log" class="btn btn-primary btn-full" disabled>
+        📝 Logger le temps
+      </button>
+
+      <!-- Recent Logs -->
+      <section class="section recent-logs">
+        <div class="section-header">
+          <span class="label">Logs récents</span>
+          <button id="refresh-logs" class="btn-icon-small" title="Rafraîchir">🔄</button>
+        </div>
+        <div id="recent-logs-list" class="logs-list">
+          <p class="empty-text">Aucun log récent</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Loading State -->
+    <div id="loading-state" class="state-container hidden">
+      <div class="spinner large"></div>
+      <p>Chargement...</p>
+    </div>
+
+    <!-- Status Message -->
+    <div id="status-message" class="status-message hidden"></div>
+  </div>
+
+  <script src="js/popup.js"></script>
+</body>
+</html>

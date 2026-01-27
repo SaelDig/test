@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0052CC"/>
+      <stop offset="100%" style="stop-color:#0747A6"/>
+    </linearGradient>
+  </defs>
+  <!-- Background circle -->
+  <circle cx="64" cy="64" r="60" fill="url(#bg)"/>
+  <!-- Clock face -->
+  <circle cx="64" cy="64" r="42" fill="white" opacity="0.95"/>
+  <!-- Clock center -->
+  <circle cx="64" cy="64" r="4" fill="#0052CC"/>
+  <!-- Hour hand -->
+  <rect x="62" y="40" width="4" height="28" rx="2" fill="#0052CC"/>
+  <!-- Minute hand -->
+  <rect x="62" y="32" width="3" height="36" rx="1.5" fill="#0747A6" transform="rotate(90 64 64)"/>
+  <!-- Hour markers -->
+  <circle cx="64" cy="28" r="3" fill="#0052CC"/>
+  <circle cx="100" cy="64" r="3" fill="#0052CC"/>
+  <circle cx="64" cy="100" r="3" fill="#0052CC"/>
+  <circle cx="28" cy="64" r="3" fill="#0052CC"/>
+  <!-- Checkmark -->
+  <path d="M88 50 L98 60 L108 40" stroke="#00875A" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>

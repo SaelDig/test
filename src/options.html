@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JIRA Time Logger - Configuration</title>
+  <link rel="stylesheet" href="css/options.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>⚙️ Configuration JIRA Time Logger</h1>
+      <p class="subtitle">Configurez votre connexion à JIRA Cloud</p>
+    </header>
+
+    <main>
+      <form id="options-form">
+        <section class="form-section">
+          <h2>Connexion JIRA</h2>
+
+          <div class="form-group">
+            <label for="jira-domain">Domaine JIRA</label>
+            <div class="input-wrapper">
+              <span class="input-prefix">https://</span>
+              <input type="text" id="jira-domain" placeholder="votre-entreprise.atlassian.net" required>
+            </div>
+            <small class="help-text">Exemple: monentreprise.atlassian.net</small>
+          </div>
+
+          <div class="form-group">
+            <label for="jira-email">Email JIRA</label>
+            <input type="email" id="jira-email" placeholder="votre.email@entreprise.com" required>
+            <small class="help-text">L'email associé à votre compte Atlassian</small>
+          </div>
+
+          <div class="form-group">
+            <label for="jira-token">Token API</label>
+            <div class="input-wrapper token-input">
+              <input type="password" id="jira-token" placeholder="Votre token API Atlassian" required>
+              <button type="button" id="toggle-token" class="btn-icon" title="Afficher/Masquer">
+                👁️
+              </button>
+            </div>
+            <small class="help-text">
+              <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" rel="noopener">
+                Créer un token API →
+              </a>
+            </small>
+          </div>
+        </section>
+
+        <section class="form-section">
+          <h2>Préférences</h2>
+
+          <div class="form-group">
+            <label for="default-project">Projet par défaut (optionnel)</label>
+            <input type="text" id="default-project" placeholder="Clé du projet (ex: PROJ)">
+            <small class="help-text">Si spécifié, les recherches seront filtrées sur ce projet</small>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="remember-last-issue">
+              <span>Se souvenir de la dernière issue utilisée</span>
+            </label>
+          </div>
+
+          <div class="form-group checkbox-group">
+            <label>
+              <input type="checkbox" id="show-notifications" checked>
+              <span>Afficher les notifications de succès</span>
+            </label>
+          </div>
+        </section>
+
+        <div class="form-actions">
+          <button type="button" id="test-connection" class="btn btn-secondary">
+            🔗 Tester la connexion
+          </button>
+          <button type="submit" class="btn btn-primary">
+            💾 Sauvegarder
+          </button>
+        </div>
+      </form>
+
+      <div id="status-message" class="status-message hidden"></div>
+
+      <section class="form-section info-section">
+        <h2>ℹ️ Comment obtenir un token API ?</h2>
+        <ol>
+          <li>Allez sur <a href="https://id.atlassian.com/manage-profile/security/api-tokens" target="_blank" rel="noopener">Atlassian Account Settings</a></li>
+          <li>Cliquez sur "Create API token"</li>
+          <li>Donnez un nom à votre token (ex: "JIRA Time Logger")</li>
+          <li>Copiez le token généré et collez-le ci-dessus</li>
+        </ol>
+        <p class="warning">⚠️ Le token ne sera affiché qu'une seule fois. Conservez-le en lieu sûr.</p>
+      </section>
+    </main>
+
+    <footer>
+      <p>JIRA Time Logger v1.0.0</p>
+    </footer>
+  </div>
+
+  <script src="js/options.js"></script>
+</body>
+</html>
